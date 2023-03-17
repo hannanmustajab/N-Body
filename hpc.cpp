@@ -1,5 +1,5 @@
 /*
-    N-Body problem solution using openMP. 
+    N-Body problem solution using openMP.
     Based on code provided by: Guido Giuntoli
     link: https://www.linkedin.com/pulse/2-optimizing-c-n-body-problem-openmp-guido-giuntoli/
 */
@@ -8,6 +8,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
+#include <omp.h>
 
 class Particle
 {
@@ -104,8 +105,11 @@ int main()
     const unsigned numParticles = 10000;
     Problem problem(Mass, dt, numParticles);
 
+    double start_time = omp_get_wtime();
     for (int ts = 0; ts < nTimeSteps; ts++)
         problem.integrate();
+    double time = omp_get_wtime() - start_time;
+    printf("Time: \t %f \n", time);
 
     return 0;
 }
