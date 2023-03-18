@@ -10,6 +10,7 @@
 #include <ctime>
 #include <omp.h>
 #include <random>
+#include <fstream>
 
 using namespace std;
 
@@ -128,17 +129,17 @@ int main()
     const int nTimeSteps = 100;
     const double Mass = 1e12;
     const double dt = 1e-6;
-    const unsigned numParticles = 10000;
+    const unsigned numParticles = 10;
     Problem problem(Mass, dt, numParticles);
 
-    double start_time = omp_get_wtime();
+    // double start_time = omp_get_wtime();
     for (int ts = 0; ts < nTimeSteps; ts++)
     {
         problem.integrate();
         cout << "simulating time step: " << ts << endl;
     }
-    double time = omp_get_wtime() - start_time;
-    cout << "Elapsed time: " << time << endl;
+    // double time = omp_get_wtime() - start_time;
+    // cout << "Elapsed time: " << time << endl;
 
     return 0;
 }
