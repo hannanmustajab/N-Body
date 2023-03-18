@@ -9,21 +9,47 @@
 #include <cstdlib>
 #include <ctime>
 #include <omp.h>
+#include <random>
+
+using namespace std;
+
+constexpr double MIN_RADIUS = 1.0e1;
+constexpr double MAX_RADIUS = 1.0e10;
+
+std::uniform_real_distribution<double> distribution(MIN_RADIUS, MAX_RADIUS);
+std::default_random_engine generator;
 
 class Particle
 {
 public:
     double pos[3], vel[3];
+
+    Particle()
+    {
+        // place the particles in a rectangle
+        pos[0] = distribution(generator);
+        pos[1] = distribution(generator);
+        pos[2] = distribution(generator);
+
+        // move the coordinates to place it into a sphere
+    }
+
+    void makeItASphere(double &x, double &y, double &z)
+    {
+    }
 };
 
 class Problem
 {
+
 public:
     Problem(double mass, double dt, unsigned numParticles) : mMass(mass),
                                                              mInverseMass(1.0 / mass),
                                                              mDt(dt),
                                                              mNumParticles(numParticles),
-                                                             mParticles(new Particle[numParticles]) {}
+                                                             mParticles(new Particle[numParticles])
+    {
+    }
 
     ~Problem()
     {
@@ -107,9 +133,12 @@ int main()
 
     double start_time = omp_get_wtime();
     for (int ts = 0; ts < nTimeSteps; ts++)
+    {
         problem.integrate();
+        cout << "simulating time step: " << ts << endl;
+    }
     double time = omp_get_wtime() - start_time;
-    printf("Time: \t %f \n", time);
+    cout << "Elapsed time: " << time << endl;
 
     return 0;
 }
